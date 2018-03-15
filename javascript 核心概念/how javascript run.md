@@ -2,6 +2,7 @@
 
 
 
+# JavaScript 核心概念
 这是其实是一片总结，[JavaScript. The Core: 2nd Edition](http://dmitrysoshnikov.com/ecmascript/javascript-the-core-2nd-edition/)这篇文章至少读了3遍，但是一段时间后脑子了就觉得很模糊。于是总结一下，用于复习。
 
 ## 对象
