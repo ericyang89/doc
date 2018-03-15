@@ -11,11 +11,11 @@
 先看个例子：
 [https://ericyang89.github.io/demo/window.opener%20%E5%B8%A6%E6%9D%A5%E7%9A%84%E5%AE%89%E5%85%A8%E9%9A%90%E6%82%A3/index.html](https://ericyang89.github.io/demo/window.opener%20%E5%B8%A6%E6%9D%A5%E7%9A%84%E5%AE%89%E5%85%A8%E9%9A%90%E6%82%A3/index.html)
 
-  操作步骤
+操作步骤
   
-    + 进入页面
-    + 点击 `click me!`
-    + 3秒后，发现当前页面（有`click me!`的这个页面），跳转到一个新的网站了。
++ 进入页面
++ 点击 `click me!`
++ 3秒后，发现当前页面（有`click me!`的这个页面），跳转到一个新的网站了。
 
 ## 原因解释
 原因很简单，只用看看刚才这个链接打开的[页面](https://ericyang89.github.io/demo/window.opener%20带来的安全隐患/targetPage.html)的网页源代码就明白了。
