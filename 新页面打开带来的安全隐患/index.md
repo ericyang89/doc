@@ -38,6 +38,6 @@ otherWindow.location = url;
 rel的属性值，为啥是`noopener`和`noreferrer`，根据[标准](https://www.w3schools.com/tags/att_a_rel.asp), `noopener`就可以，而且是生效的。答案是为了兼容其他浏览器。
 但是依然有些浏览器添加 `rel="noopener noreferrer"` 依然无效，如：ie9，低版本 safair。
 
-两种方式：
-1、类似端域名服务，先用新页面打开短域名服务器页面，然后再在短域名页面的当前页面打开。
+两种方式：  
+1、类似端域名服务，先用新页面打开短域名服务器页面，然后再在短域名页面的当前页面打开。  
 2、创建一个iframe，在iframe中用新页面打开，然后清除iframe。
