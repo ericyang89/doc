@@ -53,9 +53,11 @@ React.render(React.createElement(profileView, { person: michel }), document.body
 1. 复杂应用的状态可以使用`图`（graph）来表示。
 The application state of complex applications can best be expressed using graphs to achieve referential consistency and stay close to the mental model of a problem domain.
 
-2. One should not imperatively act on state changes by using manually defined subscriptions or cursors. This will inevitably lead to bugs as a result of under- or oversubscribing.
+2. 人工订阅方式最终导致会导致遗漏或者多次订阅。
+ One should not imperatively act on state changes by using manually defined subscriptions or cursors. This will inevitably lead to bugs as a result of under- or oversubscribing.
 
-3. Use runtime analysis to determine the smallest possible set of observer → observable relationships. This leads to a computational model where it can be guaranteed that the minimum amount of derivations are run without ever observing a stale value.
+3. 使用运行时分析最终使得在数据更新后，最小的依赖（派生，derivations）更新。
+Use runtime analysis to determine the smallest possible set of observer → observable relationships. This leads to a computational model where it can be guaranteed that the minimum amount of derivations are run without ever observing a stale value.
 
 4. Any derivation that is not needed to achieve an active side effect can be optimized away completely.
 
@@ -67,13 +69,17 @@ The application state of complex applications can best be expressed using graphs
 结合一个示例说明：
 ![demo](./demo.png)
 
-1. The observable value sends a stale notification to all its observers to indicate that it has become stale. Any affected computed values will recursively pass on the notification to their observers. As a result, a part of the dependency tree will be marked as stale. In the example dependency tree of figure 5, the observers that will become stale when value ‘1’ is changed are marked with an orange, dashed border. These are all the derivations that might be affected by the changing value.
+1. 发送【脏通知】，标记所有相关数据（橙色虚线）。  
+The observable value sends a stale notification to all its observers to indicate that it has become stale. Any affected computed values will recursively pass on the notification to their observers. As a result, a part of the dependency tree will be marked as stale. In the example dependency tree of figure 5, the observers that will become stale when value ‘1’ is changed are marked with an orange, dashed border. These are all the derivations that might be affected by the changing value.
 
-2. After sending the stale notification and storing the new value, a ready notification will be sent. This message also indicates whether the value did actually change.
+2. 改变源数据（action 中修改的数据），发送【准备通知】。  
+After sending the stale notification and storing the new value, a ready notification will be sent. This message also indicates whether the value did actually change.
 
-3. As soon as a derivation has received a ready notification for every stale notification received in step 1, it knows that all the observed values are stable and it will start to recompute. Counting the number of ready / stale messages will ensure that, for example, computed value ‘4’ will only re-evaluate after computed value ‘3’ has become stable.
+3. 依赖（相关数据），收到准备通知后，按照依赖关系开始重新计算。(依赖关系用图表示)，这个过程会递归的进行。
+As soon as a derivation has received a ready notification for every stale notification received in step 1, it knows that all the observed values are stable and it will start to recompute. Counting the number of ready / stale messages will ensure that, for example, computed value ‘4’ will only re-evaluate after computed value ‘3’ has become stable.
 
-4. If none of the ready messages indicate that a value was changed, the derivation will simply tell its own observers that it is ready again, but without changing its value. Otherwise the computation will recompute and send a ready message to its own observers. This results in the order of execution as displayed in figure 5. Note that (for example) the last reaction (marked with ‘-’) will never execute if computed value ‘4’ did re-evaluate but didn’t produce a new value.
+4. 没有收到【准备通知】的说明数据没有变。
+If none of the ready messages indicate that a value was changed, the derivation will simply tell its own observers that it is ready again, but without changing its value. Otherwise the computation will recompute and send a ready message to its own observers. This results in the order of execution as displayed in the figure. Note that (for example) the last reaction (marked with ‘-’) will never execute if computed value ‘4’ did re-evaluate but didn’t produce a new value.
 
 参考：
 
